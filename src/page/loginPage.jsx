@@ -3,7 +3,8 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 function LoginPage() {
   // کلاینت آیدی گوگل شما
-  const GOOGLE_CLIENT_ID = "://googleusercontent.com";
+  const GOOGLE_CLIENT_ID =
+    ":96586049605-bc12iugtc63ga92d7h5t018tr9q2pfuf.apps.googleusercontent.com";
 
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
