@@ -2,51 +2,46 @@ import React, { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 function LoginPage() {
-  // ⚠️ کلاینت آیدی گوگل خود را دقیقاً به جای متن زیر قرار دهید
-  const GOOGLE_CLIENT_ID =
-    "96586049605-bc12iugtc63ga92d7h5t018tr9q2pfuf.apps.googleusercontent.com";
+  // کلاینت آیدی گوگل شما
+  const GOOGLE_CLIENT_ID = "://googleusercontent.com";
 
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(""); // برای ذخیره و نمایش خطاهای احتمالی
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    setErrorMessage(""); // پاک کردن خطاهای قبلی در هر بار تلاش
+    setErrorMessage("");
     const tokenFromGoogle = credentialResponse.credential;
 
     try {
-      // 🌐 آدرس ورکر آنلاین و زنده شما
-      const WORKER_URL = "https://workers.dev";
+      // 🌐 آدرس دقیق و واقعی ورکر شما جایگزین شد
+      const WORKER_URL = "https://second.akbar-hashimi215.workers.dev";
 
       // ارسال توکن گوگل به ورکر کلودفلر
       const response = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ googleToken: tokenFromGoogle }),
-        // 🔑 این خط بسیار حیاتی است تا مرورگر اجازه دهد کوکی امن ورکر در حافظه ست شود
+        // 🔑 برای ست شدن کوکی امن ورکر در مرورگر
         credentials: "include",
       });
 
       const data = await response.json();
 
       if (data.success) {
-        console.log("ورود موفقیت‌آمیز بود! مشخصات از فایربیس دریافت شد.");
-        // ذخیره مشخصات ظاهری کاربر در State برای نمایش در سایت
+        console.log("ورود موفقیت‌آمیز بود!");
         setUser(data.user);
       } else {
-        // مدیریت خطایی که ورکر یا فایربیس فرستاده است (مثل نقض قانون یک ایمیل)
         console.error("خطای سرور:", data.error, data.details);
         setErrorMessage(`ورود ناموفق: ${data.details || data.error}`);
       }
     } catch (error) {
-      // مدیریت خطای قطعی اینترنت یا در دسترس نبودن ورکر
       console.error("خطای شبکه:", error);
       setErrorMessage(
-        "ارتباط با سرور برقرار نشد. لطفاً اینترنت خود را بررسی کنید.",
+        "ارتباط با سرور برقرار نشد. لطفاً اینترنت یا وضعیت ورکر خود را بررسی کنید.",
       );
     }
   };
 
-  // اگر کاربر با موفقیت وارد شده باشد، پروفایل او را نشان بده
   if (user) {
     return (
       <div style={styles.container}>
@@ -55,13 +50,11 @@ function LoginPage() {
           <h2>خوش آمدید، {user.name}!</h2>
           <p>ایمیل شما: {user.email}</p>
           <p style={styles.successBadge}>ورود امن با کوکی فعال است</p>
-          <p>work insdie the men</p>
         </div>
       </div>
     );
   }
 
-  // اگر کاربر هنوز وارد نشده باشد، فرم ورود را نشان بده
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <div style={styles.container}>
@@ -69,7 +62,6 @@ function LoginPage() {
           <h2 style={styles.title}>ورود به حساب کاربری</h2>
           <p style={styles.subtitle}>پروژه امن EchoMail</p>
 
-          {/* نمایش پیام خطا به کاربر در صورت وجود */}
           {errorMessage && <p style={styles.errorText}>{errorMessage}</p>}
 
           <div style={styles.buttonWrapper}>
@@ -86,7 +78,6 @@ function LoginPage() {
   );
 }
 
-// استایل‌های ساده و راست‌چین شده برای فرانت‌آند
 const styles = {
   container: {
     display: "flex",
